@@ -3,7 +3,7 @@ Rails.application.routes.draw do
 
   require 'sidekiq/web'
   require 'sidekiq-scheduler/web'
-  authenticate :admin_user, ->(u) { u.super_admin? } do
+  authenticate :admin_user do
     mount Sidekiq::Web => '/admin/sidekiq'
   end
 
