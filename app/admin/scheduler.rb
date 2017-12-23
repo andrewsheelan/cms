@@ -20,16 +20,15 @@ ActiveAdmin.register Scheduler do
 
   # Allows admins to Reschedule tasks
   collection_action :reschedule, method: :get do
-    Sidekiq.schedule = Scheduler.all.map do |scheduler|
-      {
-        scheduler.id => {
+    Sidekiq.schedule = Scheduler.where(active: true).map do |scheduler|
+      ["Schedule: #{scheduler.id}", {
           cron: scheduler.process_time,
           class: RunQuery,
           args: scheduler.process_statement,
           description: "Run Query #{scheduler.process_statement} at #{scheduler.process_time}"
         }
-      }
-    end.to_yaml
+      ]
+    end.to_h
     Sidekiq::Scheduler.reload_schedule!
     redirect_to admin_schedulers_path, notice: 'Rescheduled!'
   end
