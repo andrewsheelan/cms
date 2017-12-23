@@ -29,7 +29,7 @@ ActiveAdmin.register Scheduler do
           description: "Run Query #{scheduler.process_statement} at #{scheduler.process_time}"
         }
       }
-    end
+    end.to_yaml
     Sidekiq::Scheduler.reload_schedule!
     redirect_to admin_schedulers_path, notice: 'Rescheduled!'
   end
