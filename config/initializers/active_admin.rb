@@ -146,7 +146,10 @@ ActiveAdmin.setup do |config|
   # Active Admin resources and pages from here.
   #
   # config.before_action :do_something_awesome
-
+  config.before_action do
+    params.permit!
+  end
+  config.display_name_methods = [:active_admin_name, :display_name, :key, :name, :email]
   # == Localize Date/Time Format
   #
   # Set the localize format to display dates and times.
@@ -290,4 +293,12 @@ ActiveAdmin.setup do |config|
   # You can inherit it with own class and inject it for all resources
   #
   # config.order_clause = MyOrderClause
+end
+
+
+require 'active_admin/base_controller'
+ActiveAdmin::BaseController.class_eval do
+  rescue_from ::Exception do |exception|
+    redirect_to (session[:prev_url] || request.url), alert: exception.message
+  end
 end
