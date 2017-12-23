@@ -1,0 +1,2 @@
+class AppboyUserEvent < ApplicationRecord
+end

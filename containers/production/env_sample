@@ -1,0 +1,6 @@
+# Copy to containers/production/.env and delete this line
+DATABASE_URL=postgresql://usr:pass@host:port/db
+RAILS_ENV=production
+RACK_ENV=production
+RAILS_ROOT=/app
+SECRET_KEY_BASE=sekret

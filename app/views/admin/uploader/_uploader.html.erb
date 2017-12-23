@@ -1,0 +1,90 @@
+<% page_options = controller.class::PAGE_OPTIONS %>
+<% formats = page_options[:formats] || '.csv' %>
+<%= form_for :dump, :url => {:action => "import"}, :html => {:multipart => true, style: 'border: 1px solid #ddd; border-radius: 15px;'} do |f| %>
+ <table style='padding: 10px'>
+
+   <tr>
+     <td>
+        <label>Unique Key: </label><%= f.select :key, active_admin_config.resource_column_names, selected: page_options[:key] %>
+     </td>
+   </tr>
+
+   <tr>
+     <td>
+       Supported formats - <%= formats.gsub('.','').upcase %>
+       <%= f.file_field :file, accept: formats, required: true  %>
+     </td>
+   </tr>
+
+   <tr>
+     <td>
+       <p>
+         <br/>
+         <label style='display: inline'>
+           <%= f.check_box :retain, checked: page_options[:retain] %> retain ids
+         </label>
+         <% if active_admin_config.resource_class.respond_to? :copy_to_string %>
+         <label style='display: inline; padding-left: 10px'>
+           <%= f.check_box :bulk, checked: page_options[:bulk] %> bulk insert
+         </label>
+         <% end %>
+
+         <br/><br/><br/>
+       </p>
+     </td>
+   </tr>
+
+   <tr>
+     <td style='text-align: center'>
+       <%= submit_tag 'Upload File' %>
+     </td>
+   </tr>
+
+ </table>
+
+
+<% end %>
+
+Recent Backups:
+<ul>
+<% AdminBackup.where(model: active_admin_config.resource_class.name).order(created_at: :DESC).limit(5).each do |bkup| %>
+  <li>
+    <a title="<%= bkup.name %>" href="#" onclick="$('.hider').not($(this).parent().find('.hider')).slideUp();$(this).parent().find('.hider').slideToggle();return false;"><%=bkup.created_at%></a> | <a href='<%=active_admin_config.resource_name.collection%>/restore?id=<%=bkup.id%>'>Restore</a>
+    <div class='hider' style='display: none'>
+       <table style='border: 1px solid #ddd; padding-top: 15px; padding-bottom: 15px; border-radius: 15px;'>
+
+       <tr>
+         <td>
+            <label>File #<%=bkup.id%>:</label><%=bkup.name%>
+         </td>
+       </tr>
+       <tr>
+         <td>
+            <label>Comments: </label><%=bkup.comments%>
+         </td>
+       </tr>
+       <tr>
+         <td>
+            <label>Created At: </label><%=bkup.created_at%>
+         </td>
+       </tr>
+       <tr>
+         <td style='text-align: center'>
+            <button onclick="window.open('<%=bkup.file.url%>')" class="linked-button">Download</button>
+         </td>
+       </tr>
+      </table>
+    </div>
+  </li>
+<% end %>
+
+</ul>
+
+<table style='border: 1px solid #ddd; padding-top: 15px; padding-bottom: 15px; border-radius: 15px;'>
+<tr>
+ <td style='text-align: center'>
+   <label>Backup Now: </label>
+   <button onclick="window.location.href='<%=active_admin_config.resource_name.collection%>/backup'" class="linked-button">Create Snapshot</button>
+ </td>
+</tr>
+</table>

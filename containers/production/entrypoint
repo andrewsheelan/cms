@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+if [[ -a /tmp/puma.pid ]]; then
+  rm /tmp/puma.pid
+fi
+echo 'Removed old pids and adding new ones'
+bundle exec rake db:migrate
+bundle exec rake assets:precompile
+
+mkdir -p /etc/nginx/conf.d/
+cp containers/production/nginx.conf /etc/nginx/conf.d/default.conf
+
+bundle exec rails server -b 0.0.0.0 -P /tmp/puma.pid
+exec "\$@"

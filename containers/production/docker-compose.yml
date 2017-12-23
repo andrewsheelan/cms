@@ -1,0 +1,48 @@
+version: '3.2'
+services:
+  nginx:
+    image: nginx:1.11.9
+    volumes:
+      - nginx_config:/etc/nginx/conf.d
+      - type: bind
+        source: ./public
+        target: /app/public
+    depends_on:
+      - app
+    ports:
+      - 80:80
+  redis:
+    image: redis
+  app:
+    build:
+      context: .
+      dockerfile: containers/production/Dockerfile
+    env_file:
+      - containers/production/.env
+    command: containers/production/entrypoint
+    volumes:
+      - nginx_config:/etc/nginx/conf.d
+      - type: bind
+        source: .
+        target: /app
+    depends_on:
+      - redis
+    ports:
+      - 3000:3000
+  sidekiq:
+    build:
+      context: .
+      dockerfile: containers/production/Dockerfile
+    env_file:
+      - containers/production/.env
+    command: bash -c "bundle install && bundle exec sidekiq"
+    volumes:
+      - nginx_config:/etc/nginx/conf.d
+      - type: bind
+        source: .
+        target: /app
+    depends_on:
+      - redis
+volumes:
+  nginx_config:
+    external: false

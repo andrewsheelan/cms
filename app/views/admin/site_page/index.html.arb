@@ -1,0 +1,17 @@
+resource_collection = ActiveAdmin.application.namespaces[:admin].resources
+
+resources = resource_collection.select do |resource|
+  resource.respond_to? :resource_class
+end
+resource_list = {}
+resource_collection.map do |a|
+  url = a.menu_item_options[:url].is_a?(String) ? a.menu_item_options[:url] : "/admin/#{a.menu_item_options[:id].to_s.underscore}"
+  parent  = a.menu_item.parent.label if a.menu_item.parent.respond_to? :label
+  label   = a.menu_item_options[:id].instance_variable_get(:@human) || a.menu_item_options[:label].call
+  label_k = parent.blank? ? label : "#{parent} > #{label}"
+  resource_list[label_k] = url unless url == '#'
+end
+
+active_admin_form_for 'my_site_page' do |f|
+  f.input :my_site_pages, collection: resource_list, label: false, id: 'my_site_page_select', class: 'my_site_page_select'
+end

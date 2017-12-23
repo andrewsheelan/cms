@@ -1,0 +1,27 @@
+panel 'Historia' do
+  table_for assigns[:versions] do
+    column 'id', :id
+    column 'item type', :item_type
+    column 'item id', :item_id
+    column 'event', :event
+    column(:admin) do |version|
+      AdminUser.find(version.whodunnit).email if version.whodunnit
+    end
+    column(:object) do |version|
+      if version.object
+        objs = YAML.load(version.object)
+
+        # we gather all possible attribute's name in the data hash:
+        headers = objs.keys
+        table style: 'width: inherit' do
+          headers.each do |key|
+            tr do
+              td b key
+              td objs[key]
+            end
+          end
+        end
+      end
+    end
+  end
+end

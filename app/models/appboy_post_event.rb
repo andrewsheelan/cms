@@ -1,0 +1,2 @@
+class AppboyPostEvent < ApplicationRecord
+end

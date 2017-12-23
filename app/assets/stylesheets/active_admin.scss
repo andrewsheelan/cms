@@ -1,0 +1,224 @@
+//= require activeadmin_addons/all
+// SASS variable overrides must be declared before loading up Active Admin's styles.
+//
+// To view the variables that Active Admin provides, take a look at
+// `app/assets/stylesheets/active_admin/mixins/_variables.scss` in the
+// Active Admin source.
+//
+// For example, to change the sidebar width:
+// $sidebar-width: 242px;
+// Active Admin's got SASS!
+@import "active_admin/mixins";
+@font-face {
+  font-family:'DINRoundOT';
+  src:asset_url('DINRoundOT.eot');
+  src:local('☺'), asset_url('DINRoundOT.woff') format('woff'), asset_url('DINRoundOT.ttf') format('truetype'), asset_url('DINRoundOT.svg') format('svg');
+  font-weight:normal;
+  font-style:normal;
+}
+// Active Admin's Mixin overrides
+$breadcrumbs-color: #333;
+$skinActiveColor: #64be84;
+$skinHeaderBck: #00a8ad;
+$panelHeaderBck: #00a8ad;
+$skinTextTable: #333;
+$skinFontFamily: 'DINRoundOT';
+
+@import "active_admin/base";
+@import "select2";
+@import "active_skin";
+
+.attributes_table table th, .attributes_table table td {
+  color: $skinTextTable;
+}
+#header{
+  height: 35px;
+  ul.tabs > li.has_nested ul {
+    max-width: calc(100% + 200px);
+    width: 220px;
+    a{
+      padding: 8px 20px
+    }
+  }
+}
+.panel > h3, .sidebar_section.panel > h3 {
+  color: #333;
+  background: #fff
+}
+
+#title_bar{
+  background-image: image-url("admin_header.jpg");
+  border-bottom: 4px solid #00a8ad;
+  #titlebar_left{
+    background-image: image-url("numi_logo.png");
+    background-repeat: no-repeat;
+    background-size: 100px;
+    background-position-y: bottom;
+    .breadcrumb {
+      margin-left: 118px;
+    }
+    h2 {
+      color: grey;
+      margin-left: 118px;
+      padding-left: 15px;
+      border-left: 1px double #ccc;
+    }
+  }
+}
+
+#importer_sidebar_section select {
+  width:200px;
+}
+
+#header h1.site_title {
+  background-size: 70px;
+  display: none;
+}
+#importer_sidebar_section select {
+  width:200px;
+}
+
+#header ul.tabs > li.has_nested.current a{
+  background-color: transparent;
+  color: green;
+}
+
+#header ul.tabs > li.has_nested.current:hover{
+  a {
+    background-color: #64be84;
+    color: white;
+  }
+}
+
+#header ul.tabs > li.current > a{
+  background-color: transparent;
+  color: green;
+}
+
+#header ul.tabs > li.current > a:hover{
+  color: #fff;
+  background: #64be84;
+}
+
+#header ul.tabs > li.current:hover{
+  z-index: 10000;
+}
+
+#header ul.tabs > li a {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+#header ul.tabs > li.has_nested ul a{
+  font-weight: unset;
+  text-transform: capitalize;
+}
+
+// Overriding any non-variable SASS must be done after the fact.
+// For example, to change the default status-tag color:
+//
+//   .status_tag { background: #6090DB; }
+
+button.linked-button, a.linked-button{
+    @include light-button;
+    font-family: 'DINRoundOT';
+    color: #333;
+}
+div.panel-min-height { min-height: 75px; }
+div.padding-float { padding-bottom: 10px; float: right; }
+span.display-inline-table { display: inline-table; }
+.tree-bordered {
+  border-bottom: 1px solid black;
+  padding-top: 50px;
+  padding-bottom: 50px;
+  text-align: center;
+}
+.tree-center {text-align: center;}
+
+.tree-expandable { margin: 20px; }
+
+#footer {
+  position: inherit;
+  bottom: inherit;
+  left: inherit;
+  right: inherit;
+  background-color: #00a8ad;
+  color: white;
+  text-align: center;
+  border-top: 1px solid #009699;
+}
+#wrapper, body{
+  height: 100%;
+}
+
+.panel .panel_contents{
+  min-height: 20px;
+}
+
+#my_site_page_my_site_pages_input{
+  list-style: none;
+  width: 100%;
+  #s2id_my_site_page_my_site_pages{
+    width: 100%;
+  }
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+
+  position: relative;
+  margin: 100px auto;
+}
+
+.double-bounce1, .double-bounce2 {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: #333;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
+  animation: sk-bounce 2.0s infinite ease-in-out;
+}
+
+.double-bounce2 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+
+@-webkit-keyframes sk-bounce {
+  0%, 100% { -webkit-transform: scale(0.0) }
+  50% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bounce {
+  0%, 100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  } 50% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}
+
+
+#migrate_users_user_ids{
+  margin-bottom: 15px
+}
+
+.progress-percentage {
+  width: 0%;
+  height: 30px;
+  background-color: #4CAF50;
+  text-align: center;
+  line-height: 30px;
+  color: white;
+}
+
+.progress {
+  width: 100%;
+  background-color: #ddd;
+}
