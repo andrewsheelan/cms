@@ -14,4 +14,5 @@ Rails.application.routes.draw do
     end
   end
   ActiveAdmin.routes(self)
+  root to: "admin/dashboard#index"
 end

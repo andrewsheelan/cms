@@ -7,10 +7,14 @@ services:
       - type: bind
         source: ./public
         target: /app/public
+      - type: bind
+        source: ./certs
+        target: /app/certs
     depends_on:
       - app
     ports:
       - 80:80
+      - 443:443
   redis:
     image: redis
   app:
