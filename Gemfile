@@ -40,6 +40,7 @@ gem 'redis-namespace'
 gem 'sidekiq'
 gem 'sidekiq-scheduler' # Recurring Jobs
 gem 'sinatra' # used by sidekiq monitor
+gem 'sidekiq-limit_fetch'
 
 # Admin Console
 gem 'activeadmin'

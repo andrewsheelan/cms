@@ -47,6 +47,18 @@ services:
         target: /app
     depends_on:
       - redis
+  schedulex:
+    build:
+      context: .
+      dockerfile: containers/production/Dockerfile
+    env_file:
+      - containers/production/.env
+    command: bash -c "mix deps.get && iex -S mix"
+    volumes:
+      - './schedulex:/app'
+    depends_on:
+      - redis
+
 volumes:
   nginx_config:
     external: false
