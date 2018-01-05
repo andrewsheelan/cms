@@ -50,7 +50,7 @@ services:
   schedulex:
     build:
       context: .
-      dockerfile: containers/production/Dockerfile
+      dockerfile: containers/production/Dockerfile.schedulex
     env_file:
       - containers/production/.env
     command: bash -c "mix deps.get && iex -S mix"

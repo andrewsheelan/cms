@@ -1,0 +1,18 @@
+FROM elixir:1.5.2-slim
+
+ENV RAILS_ROOT=/app
+ENV RAILS_ENV=prod
+
+WORKDIR /app
+
+COPY schedulex /app/
+
+RUN apt-get update
+
+# Required hex packages
+RUN mix local.hex --force
+RUN mix local.rebar --force
+RUN mix deps.get
+
+# Run schedulex
+CMD [ "bash -c mix deps.get && iex -S mix" ]
