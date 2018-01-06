@@ -4,7 +4,6 @@ defmodule Schedulex.Models.AppboyAttribute do
   alias Schedulex.Models.AppboyAttribute
   alias Schedulex.EctoBatchStream
   import Ecto.Query, only: [from: 1, from: 2]
-  @batch_size 50
   schema "appboy_attributes" do
     field :user_id, :integer
     field :attribute_name, :string
@@ -60,6 +59,7 @@ defmodule Schedulex.Models.AppboyAttribute do
       iex> Schedulex.Models.AppboyAttribute.users_in(table_name, user_ids)
       %Schedulex.Models.AppboyAttribute{}
   """
+  @batch_size 50
   def batch_unprocessed_users(tbl) do
     query = from(
       u in {tbl, AppboyAttribute},
@@ -67,6 +67,6 @@ defmodule Schedulex.Models.AppboyAttribute do
       where: is_nil(u.status)
     )
     stream = EctoBatchStream.stream(Repo, query)
-    stream |> Stream.take(50) |> Enum.to_list
+    stream |> Stream.take(@batch_size) |> Enum.to_list
   end
 end

@@ -1,5 +1,4 @@
 defmodule Schedulex.TrackPostAppboy do
-  import Inflex
   @moduledoc """
   Documentation for Schedulex.TrackPostAppboy
   """
@@ -17,7 +16,7 @@ defmodule Schedulex.TrackPostAppboy do
     result = Schedulex.Models.AppboyAttribute.users_in(tbl, user_ids)
     response = Schedulex.Appboy.send_bulk_attributes(appboy_group_id, result)
     if response.status == 201 do
-      Schedulex.Appboy.set_status_for_users_in(tbl, user_ids, "COMPLETED")
+      Schedulex.Models.AppboyAttribute.set_status_for_users_in(tbl, user_ids, "COMPLETED")
     else
       Exq.enqueue(
         Exq, "appboy", Schedulex.TrackPostAppboy, [appboy_group_id, tbl, user_ids]
