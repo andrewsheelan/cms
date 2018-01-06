@@ -4,6 +4,7 @@ if [[ -a /tmp/puma.pid ]]; then
   rm /tmp/puma.pid
 fi
 echo 'Removed old pids and adding new ones'
+bundle install
 bundle exec rake db:migrate
 bundle exec rake assets:precompile
 

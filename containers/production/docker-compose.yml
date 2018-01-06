@@ -53,7 +53,7 @@ services:
       dockerfile: containers/production/Dockerfile.schedulex
     env_file:
       - containers/production/.env
-    command: bash -c "mix deps.get && iex -S mix"
+    command: bash -c "mix deps.get && source /app/.env && mix run --no-halt"
     volumes:
       - './schedulex:/app'
     depends_on:

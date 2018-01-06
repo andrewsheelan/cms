@@ -14,5 +14,7 @@ RUN mix local.hex --force
 RUN mix local.rebar --force
 RUN mix deps.get
 
+COPY ./containers/production/.env /app/.env
+
 # Run schedulex
-CMD [ "bash -c mix deps.get && iex -S mix" ]
+CMD [ "bash -c mix deps.get && source /app/.env && mix run --no-halt" ]
