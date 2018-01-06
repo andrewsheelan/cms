@@ -39,7 +39,8 @@ config :exq,
   max_retries: 25,
   shutdown_timeout: 5000,
   queues: [
-    {"exq", 10}
+    {"scheduler", 10},
+    {"appboy", 10}
   ]
 
 config :schedulex, ecto_repos: [Schedulex.Repo]

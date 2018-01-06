@@ -95,7 +95,10 @@ defmodule Schedulex.Appboy do
     request_url = "https://api.appboy.com/users/track"
     # Store the request data as a dictionary
     attrs = for event_data <- params do
-      %{ :external_id => event_data.external_id, event_data.attribute_name => event_data.data_value }
+      %{
+        :external_id => event_data.external_id,
+        event_data.attribute_name => event_data.data_value
+      }
     end
     data = %{
       app_group_id: app_group_id,

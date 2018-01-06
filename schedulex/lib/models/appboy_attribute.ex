@@ -2,8 +2,9 @@ defmodule Schedulex.Models.AppboyAttribute do
   use Ecto.Schema
   alias Schedulex.Repo
   alias Schedulex.Models.AppboyAttribute
-  import Ecto.Query, only: [from: 2]
-
+  alias Schedulex.EctoBatchStream
+  import Ecto.Query, only: [from: 1, from: 2]
+  @batch_size 50
   schema "appboy_attributes" do
     field :user_id, :integer
     field :attribute_name, :string
@@ -17,7 +18,7 @@ defmodule Schedulex.Models.AppboyAttribute do
   Examples
 
       iex> Schedulex.Models.AppboyAttribute.find_by("appboy_user_events", email: "email@example.com")
-      %Schedulex.Models.User{}
+      %Schedulex.Models.AppboyAttribute{}
   """
   def find_by(tbl, conditions) do
     Repo.get_by {tbl, AppboyAttribute}, conditions
@@ -28,12 +29,12 @@ defmodule Schedulex.Models.AppboyAttribute do
   Examples
 
       iex> Schedulex.Models.AppboyAttribute.users_in(table_name, user_ids)
-      %Schedulex.Models.User{}
+      %Schedulex.Models.AppboyAttribute{}
   """
   def users_in(tbl, user_ids) do
     from(
       p in {tbl, AppboyAttribute},
-      where: [user_id: user_ids]
+      where: p.user_id in ^user_ids
     ) |> Repo.all
   end
 
@@ -42,13 +43,30 @@ defmodule Schedulex.Models.AppboyAttribute do
   Examples
 
       iex> Schedulex.Models.AppboyAttribute.users_in(table_name, user_ids)
-      %Schedulex.Models.User{}
+      %Schedulex.Models.AppboyAttribute{}
   """
   def set_status_for_users_in(tbl, user_ids, status) do
     from(
       p in {tbl, AppboyAttribute},
-      where: [user_id: user_ids],
-      update: [set: [status: ^status]]
+      where: p.user_id in ^user_ids,
+      update: [set: [status: ^status, date_sent: ^NaiveDateTime.utc_now]]
     )
+  end
+
+  @doc """
+  Fetch in batches
+  Examples
+
+      iex> Schedulex.Models.AppboyAttribute.users_in(table_name, user_ids)
+      %Schedulex.Models.AppboyAttribute{}
+  """
+  def batch_unprocessed_users(tbl) do
+    query = from(
+      u in {tbl, AppboyAttribute},
+      select: u.user_id,
+      where: u.status is nil
+    )
+    stream = EctoBatchStream.stream(Repo, query)
+    stream |> Stream.take(50) |> Enum.to_list
   end
 end
