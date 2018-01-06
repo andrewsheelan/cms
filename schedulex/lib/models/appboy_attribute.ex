@@ -64,7 +64,7 @@ defmodule Schedulex.Models.AppboyAttribute do
     query = from(
       u in {tbl, AppboyAttribute},
       select: u.user_id,
-      where: u.status is nil
+      where: is_nil(u.status)
     )
     stream = EctoBatchStream.stream(Repo, query)
     stream |> Stream.take(50) |> Enum.to_list
