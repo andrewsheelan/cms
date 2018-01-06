@@ -1,4 +1,5 @@
 defmodule Schedulex.TrackPostAppboy do
+  import Inflex
   @moduledoc """
   Documentation for Schedulex.TrackPostAppboy
   """
@@ -13,7 +14,7 @@ defmodule Schedulex.TrackPostAppboy do
 
   """
   def perform(appboy_group_id, tbl, user_ids) do
-    result = Ecto.Adapters.SQL.query!(Schedulex.Repo, "select user_id, data_type, data_value from #{tbl} where user_id in ($1::array)", [user_ids])
+    result = Schedulex.Models.AppboyAttribute.users_in(tbl, [123])
     response = Schedulex.Appboy.send_bulk_attributes(appboy_group_id, result)
     if response.status == 201 do
       result = Ecto.Adapters.SQL.query!(Schedulex.Repo, "update #{tbl} set date_sent=($1) where user_id in ($2::array)", [NaiveDateTime.utc_now, user_ids])

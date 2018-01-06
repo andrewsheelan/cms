@@ -15,7 +15,7 @@ defmodule Schedulex.Mixfile do
   # Type "mix help compile.app" for more information
   def application do
     # Specify extra applications you'll use from Erlang/Elixir
-    [extra_applications: [:logger, :exq, :ecto, :postgrex, :httpoison],
+    [extra_applications: [:logger, :exq, :ecto, :postgrex, :httpoison, :inflex],
     mod: {Schedulex.Application, []}]
   end
 
@@ -36,7 +36,8 @@ defmodule Schedulex.Mixfile do
       {:httpoison, "~> 0.13"},
       {:mandrill, "~> 0.4"},
       {:iteraptor, "~> 0.1.0"},
-      {:timex, "~> 3.1"}
+      {:timex, "~> 3.1"},
+      {:inflex, "~> 1.8.1"}
     ]
   end
 end
