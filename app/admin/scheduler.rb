@@ -1,6 +1,5 @@
 ActiveAdmin.register Scheduler do
   require 'sidekiq'
-  require 'sidekiq/scheduler'
 
   menu priority: 3
 
@@ -20,24 +19,50 @@ ActiveAdmin.register Scheduler do
 
   # Allows admins to Reschedule tasks
   collection_action :reschedule, method: :get do
-    Sidekiq.schedule = Scheduler.where(active: true).map do |scheduler|
-      ["Schedule: #{scheduler.id}", {
+    Sidekiq::Cron::Job.destroy_all!
+    Scheduler.where(active: true).map do |scheduler|
+      if scheduler.worker == 'Query'
+        Sidekiq::Cron::Job.create(
+          name: "Schedule: #{scheduler.id}",
           cron: scheduler.process_time,
-          class: RunQuery,
-          args: scheduler.process_statement,
-          description: "Run Query #{scheduler.process_statement} at #{scheduler.process_time}"
-        }
-      ]
-    end.to_h
-    Sidekiq::Scheduler.reload_schedule!
+          class: 'RunQuery',
+          args: [scheduler.process_statement]
+        )
+      elsif scheduler.worker == 'Appboy'
+        Sidekiq::Cron::Job.create(
+          name: "Schedule: #{scheduler.id}",
+          cron: scheduler.process_time,
+          class: 'RunAppboy',
+          args: [JSON.parse(scheduler.process_statement)]
+        )
+      end
+    end
     redirect_to admin_schedulers_path, notice: 'Rescheduled!'
   end
+
+  form do |f|
+    f.semantic_errors # shows errors on :base
+
+    f.inputs do
+      f.input :worker, collection: ['Query', 'Appboy']
+      f.input :process_statement
+      f.input :process_time
+      f.input :active
+    end
+    f.actions # adds the 'Submit' and 'Cancel' buttons
+  end
+
+  index do
+    selectable_column
+    id_column
+
+    column :worker
+    column :process_statement
+    column :process_time
+    column :active
+    column :created_at
+    column :updated_at
+
+    actions
+  end
 end
-
-
-# clear_leaderboards_contributors:
-#   cron: '0 30 6 * * 1'
-#   class: ClearLeaderboards
-#   queue: low
-#   args: contributors
-#   description: 'This job resets the weekly leaderboard for contributions'

@@ -96,7 +96,7 @@ defmodule Schedulex.Appboy do
     # Store the request data as a dictionary
     attrs = for event_data <- params do
       %{
-        :external_id => event_data.external_id,
+        :external_id => event_data.user_id,
         event_data.attribute_name => event_data.data_value
       }
     end

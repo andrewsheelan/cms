@@ -1,5 +1,3 @@
-require 'sidekiq-scheduler'
-
 class RunQuery
   include Sidekiq::Worker
 

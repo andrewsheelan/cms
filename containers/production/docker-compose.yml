@@ -39,23 +39,33 @@ services:
       dockerfile: containers/production/Dockerfile
     env_file:
       - containers/production/.env
-    command: bash -c "bundle install && bundle exec sidekiq"
+    command: bash -c "bundle install && bundle exec sidekiq -C config/sidekiq.yml"
     volumes:
       - nginx_config:/etc/nginx/conf.d
       - type: bind
         source: .
         target: /app
+      - type: bind
+        source: ./containers/production/.env
+        target: /app/.env
     depends_on:
       - redis
   schedulex:
+    tty: true
+    stdin_open: true
     build:
       context: .
       dockerfile: containers/production/Dockerfile.schedulex
     env_file:
       - containers/production/.env
-    command: bash -c "mix deps.get && source /app/.env && mix run --no-halt"
+    command: bash -c "mix deps.get && source .env && mix run --no-halt"
     volumes:
-      - './schedulex:/app'
+      - type: bind
+        source: ./schedulex
+        target: /app
+      - type: bind
+        source: ./containers/production/.env
+        target: /app/.env
     depends_on:
       - redis
 

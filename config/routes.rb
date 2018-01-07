@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   # === Sidekiq Monitoring
 
   require 'sidekiq/web'
-  require 'sidekiq-scheduler/web'
+  require 'sidekiq/cron/web'
   authenticate :admin_user do
     mount Sidekiq::Web => '/admin/sidekiq'
   end

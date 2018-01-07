@@ -12,15 +12,19 @@ defmodule Schedulex.ScheduleTrackAppboy do
       {:ok, 7645}
 
   """
-  def perform(appboy_group_id, tbl, batch_count \\ 10) do
-      Enum.each 1..batch_count, fn(_) -> process(appboy_group_id, tbl) end
+  def perform(args) do
+    %{ "appboy_group_id" => appboy_group_id, "table" => tbl, "batch_count" => batch_count} = args
+    # appboy_group_id, tbl, batch_count \\ 10
+    Enum.each 1..batch_count, fn(_) -> process(appboy_group_id, tbl) end
   end
 
   defp process(appboy_group_id, tbl) do
     user_ids = Schedulex.Models.AppboyAttribute.batch_unprocessed_users(tbl)
-    Exq.enqueue(
-      Exq, "exq", Schedulex.TrackPostAppboy, [appboy_group_id, tbl, user_ids]
-    )
-    Schedulex.Models.AppboyAttribute.set_status_for_users_in(tbl, user_ids, "QUEUED")
+    unless Enum.empty?(user_ids) do
+      Exq.enqueue(
+        Exq, "appboy", Schedulex.TrackPostAppboy, [appboy_group_id, tbl, user_ids]
+      )
+      Schedulex.Models.AppboyAttribute.set_status_for_users_in(tbl, user_ids, "QUEUED")
+    end
   end
 end

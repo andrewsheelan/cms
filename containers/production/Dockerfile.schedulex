@@ -17,4 +17,4 @@ RUN mix deps.get
 COPY ./containers/production/.env /app/.env
 
 # Run schedulex
-CMD [ "bash -c mix deps.get && source /app/.env && mix run --no-halt" ]
+CMD [ "bash -c mix deps.get && source .env && mix run --no-halt" ]

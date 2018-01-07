@@ -3,7 +3,7 @@ defmodule Schedulex.Models.AppboyAttribute do
   alias Schedulex.Repo
   alias Schedulex.Models.AppboyAttribute
   alias Schedulex.EctoBatchStream
-  import Ecto.Query, only: [from: 1, from: 2]
+  import Ecto.Query, only: [from: 2]
   schema "appboy_attributes" do
     field :user_id, :integer
     field :attribute_name, :string
@@ -49,7 +49,7 @@ defmodule Schedulex.Models.AppboyAttribute do
       p in {tbl, AppboyAttribute},
       where: p.user_id in ^user_ids,
       update: [set: [status: ^status, date_sent: ^NaiveDateTime.utc_now]]
-    )
+    ) |> Schedulex.Repo.update_all([])
   end
 
   @doc """
