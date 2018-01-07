@@ -244,13 +244,11 @@ GEM
       connection_pool (~> 2.2, >= 2.2.0)
       rack-protection (>= 1.5.0)
       redis (>= 3.3.4, < 5)
+    sidekiq-cron (0.6.3)
+      rufus-scheduler (>= 3.3.0)
+      sidekiq (>= 4.2.1)
     sidekiq-limit_fetch (3.4.0)
       sidekiq (>= 4)
-    sidekiq-scheduler (2.1.10)
-      redis (>= 3, < 5)
-      rufus-scheduler (~> 3.2)
-      sidekiq (>= 3)
-      tilt (>= 1.4.0)
     sinatra (2.0.0)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -321,8 +319,8 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   selenium-webdriver
   sidekiq
+  sidekiq-cron
   sidekiq-limit_fetch
-  sidekiq-scheduler
   sinatra
   spring
   spring-watcher-listen (~> 2.0.0)
