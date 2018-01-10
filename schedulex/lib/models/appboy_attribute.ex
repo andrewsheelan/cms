@@ -58,7 +58,7 @@ defmodule Schedulex.Models.AppboyAttribute do
       iex> Schedulex.Models.AppboyAttribute.users_in(table_name, user_ids)
       %Schedulex.Models.AppboyAttribute{}
   """
-  @batch_size 1
+  @batch_size 10
   def batch_unprocessed_users(tbl) do
     from(
       u in {tbl, AppboyAttribute},
