@@ -13,6 +13,7 @@ defmodule Schedulex.TrackPostAppboy do
 
   """
   def perform(appboy_group_id, tbl, user_ids) do
+    IO.inspect user_ids
     result = Schedulex.Models.AppboyAttribute.users_in(tbl, user_ids)
     {_, response} = Schedulex.Appboy.send_bulk_attributes(appboy_group_id, result)
     if response.status_code == 201 do
