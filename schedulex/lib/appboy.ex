@@ -104,6 +104,7 @@ defmodule Schedulex.Appboy do
       app_group_id: app_group_id,
       attributes: attrs
     }
+    IO.inspect data
     call(request_url, data)
   end
 
