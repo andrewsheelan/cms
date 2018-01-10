@@ -26,13 +26,13 @@ defmodule Schedulex.Models.AppboyAttribute do
   Select clause
   Examples
 
-      iex> Schedulex.Models.AppboyAttribute.users_in(table_name, user_ids)
+      iex> Schedulex.Models.AppboyAttribute.users_in(table_name, ids)
       %Schedulex.Models.AppboyAttribute{}
   """
-  def users_in(tbl, user_ids) do
+  def users_in(tbl, ids) do
     from(
       p in {tbl, AppboyAttribute},
-      where: p.user_id in ^user_ids
+      where: p.id in ^ids
     ) |> Repo.all
   end
 
@@ -40,13 +40,13 @@ defmodule Schedulex.Models.AppboyAttribute do
   Update status
   Examples
 
-      iex> Schedulex.Models.AppboyAttribute.users_in(table_name, user_ids)
+      iex> Schedulex.Models.AppboyAttribute.users_in(table_name, ids)
       %Schedulex.Models.AppboyAttribute{}
   """
-  def set_status_for_users_in(tbl, user_ids, status) do
+  def set_status_for_users_in(tbl, ids, status) do
     from(
       p in {tbl, AppboyAttribute},
-      where: p.user_id in ^user_ids,
+      where: p.id in ^ids,
       update: [set: [status: ^status, date_sent: ^NaiveDateTime.utc_now]]
     ) |> Schedulex.Repo.update_all([])
   end
@@ -55,14 +55,14 @@ defmodule Schedulex.Models.AppboyAttribute do
   Fetch in batches
   Examples
 
-      iex> Schedulex.Models.AppboyAttribute.users_in(table_name, user_ids)
+      iex> Schedulex.Models.AppboyAttribute.users_in(table_name, ids)
       %Schedulex.Models.AppboyAttribute{}
   """
-  @batch_size 10
+  @batch_size 50
   def batch_unprocessed_users(tbl) do
     from(
       u in {tbl, AppboyAttribute},
-      select: u.user_id,
+      select: u.id,
       where: is_nil(u.status),
       limit: @batch_size
     ) |> Repo.all
