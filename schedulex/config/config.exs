@@ -40,6 +40,7 @@ config :exq,
   shutdown_timeout: 5000,
   queues: [
     {"scheduler", 10},
+    {"analytics", 10},
     {"appboy", 10}
   ]
 

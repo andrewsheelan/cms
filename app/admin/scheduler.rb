@@ -35,6 +35,13 @@ ActiveAdmin.register Scheduler do
           class: 'RunAppboy',
           args: [JSON.parse(scheduler.process_statement)]
         )
+      elsif scheduler.worker == 'Google Analytics'
+        Sidekiq::Cron::Job.create(
+          name: "Schedule: #{scheduler.id}",
+          cron: scheduler.process_time,
+          class: 'RunGoogleAnalytics',
+          args: [JSON.parse(scheduler.process_statement)]
+        )
       end
     end
     redirect_to admin_schedulers_path, notice: 'Rescheduled!'
@@ -44,7 +51,7 @@ ActiveAdmin.register Scheduler do
     f.semantic_errors # shows errors on :base
 
     f.inputs do
-      f.input :worker, collection: ['Query', 'Appboy']
+      f.input :worker, collection: ['Query', 'Appboy', 'Google Analytics']
       f.input :process_statement
       f.input :process_time
       f.input :active
