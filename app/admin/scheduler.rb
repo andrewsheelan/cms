@@ -21,50 +21,6 @@ ActiveAdmin.register Scheduler do
   collection_action :reschedule, method: :get do
     Sidekiq::Cron::Job.destroy_all!
     Scheduler.where(active: true).map do |scheduler|
-      schedule_job(scheduler)
-    end
-    redirect_to admin_schedulers_path, notice: 'Rescheduled!'
-  end
-
-  action_item :run_now, only: :show, :edit do
-     link_to 'Run now', run_now_admin_scheduler_path(membership)
-  end
-  # Allows admins to run tasks
-  member_action :run_now, method: :get do
-    run_now(Scheduler.find(params[:id]))
-    redirect_to admin_schedulers_path, notice: 'Executing!'
-  end
-
-  form do |f|
-    f.semantic_errors # shows errors on :base
-
-    f.inputs do
-      f.input :worker, collection: ['Query', 'Appboy', 'Google Analytics']
-      f.input :process_statement
-      f.input :process_time
-      f.input :active
-    end
-    f.actions # adds the 'Submit' and 'Cancel' buttons
-  end
-
-  index do
-    selectable_column
-    id_column
-
-    column :worker
-    column :process_statement
-    column :process_time
-    column :active
-    column :created_at
-    column :updated_at
-
-    actions
-  end
-
-  controller do
-    # This code is evaluated within the controller class
-
-    def schedule_job(scheduler)
       if scheduler.worker == 'Query'
         Sidekiq::Cron::Job.create(
           name: "Schedule: #{scheduler.id}",
@@ -88,16 +44,53 @@ ActiveAdmin.register Scheduler do
         )
       end
     end
-
-    def run_now(scheduler)
-      if scheduler.worker == 'Query'
-        RunQuery.new.perform([scheduler.process_statement])
-      elsif scheduler.worker == 'Appboy'
-        RunAppboy.new.perform([JSON.parse(scheduler.process_statement)])
-      elsif scheduler.worker == 'Google Analytics'
-        RunGoogleAnalytics.new.perform([JSON.parse(scheduler.process_statement)])
-      end
-    end
-
+    redirect_to admin_schedulers_path, notice: 'Rescheduled!'
   end
+
+  action_item :run_now, only: [:show, :edit] do
+     link_to 'Run now', run_now_admin_scheduler_path(params[:id])
+  end
+  # Allows admins to run tasks
+  member_action :run_now, method: :get do
+    scheduler = Scheduler.find(params[:id])
+    if scheduler.worker == 'Query'
+      RunQuery.new.perform(scheduler.process_statement)
+    elsif scheduler.worker == 'Appboy'
+      RunAppboy.new.perform(JSON.parse(scheduler.process_statement))
+    elsif scheduler.worker == 'Google Analytics'
+      RunGoogleAnalytics.new.perform(JSON.parse(scheduler.process_statement))
+    end
+    redirect_to admin_schedulers_path, notice: 'Executing!'
+  end
+
+  form do |f|
+    f.semantic_errors # shows errors on :base
+
+    f.inputs do
+      f.input :worker, collection: ['Query', 'Appboy', 'Google Analytics']
+      f.input :process_statement
+      f.input :process_time
+      f.input :active
+      f.input :description
+    end
+    f.actions # adds the 'Submit' and 'Cancel' buttons
+  end
+
+  index do
+    selectable_column
+    id_column
+
+    column :worker
+    column :process_statement
+    column :process_time
+    column :active
+    column :description
+    column :created_at
+    column :updated_at
+
+    actions defaults: true do |schedule|
+      link_to "Run", run_now_admin_scheduler_path(schedule)
+    end
+  end
+
 end
