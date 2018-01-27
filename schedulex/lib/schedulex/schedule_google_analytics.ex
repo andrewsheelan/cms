@@ -33,7 +33,7 @@ defmodule Schedulex.ScheduleGoogleAnalytics do
       end
       Logger.info("Completing report for #{view_name} => #{view_id}")
     rescue
-      :exit, _ -> Exq.enqueue(Exq, "analytics", Schedulex.ScheduleGoogleAnalytics, [args])
+      _ -> Exq.enqueue(Exq, "analytics", Schedulex.ScheduleGoogleAnalytics, [args])
     end
   end
 
