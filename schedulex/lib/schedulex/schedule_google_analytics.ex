@@ -14,23 +14,27 @@ defmodule Schedulex.ScheduleGoogleAnalytics do
 
   """
   def perform(args) do
-    %{ "view_id" => view_id, "view_name" => view_name } = args
-    metrics = ["ga:sessions", "ga:1dayUsers", "ga:7dayUsers", "ga:30dayUsers"]
-    created_date = Timex.today
-    url = "https://analyticsreporting.googleapis.com/v4/reports:batchGet"
-    url = "#{url}?access_token=#{access_token()}"
-    Logger.info("Generating report for #{view_name} => #{view_id}")
-    for metric <- metrics do
-      data = response_for(url, view_id, metric)
-      Schedulex.Models.GoogleReport.clear_records(
-        view_id, metric, created_date
-      )
-      Schedulex.Models.GoogleReport.insert_records(
-        view_name, view_id, metric, created_date, data
-      )
-      Logger.info("Completed report for #{view_name}")
+    try do
+      %{ "view_id" => view_id, "view_name" => view_name } = args
+      metrics = ["ga:sessions", "ga:1dayUsers", "ga:7dayUsers", "ga:30dayUsers"]
+      created_date = Timex.today
+      url = "https://analyticsreporting.googleapis.com/v4/reports:batchGet"
+      url = "#{url}?access_token=#{access_token()}"
+      Logger.info("Generating report for #{view_name} => #{view_id}")
+      for metric <- metrics do
+        data = response_for(url, view_id, metric)
+        Schedulex.Models.GoogleReport.clear_records(
+          view_id, metric, created_date
+        )
+        Schedulex.Models.GoogleReport.insert_records(
+          view_name, view_id, metric, created_date, data
+        )
+        Logger.info("Completed report for #{view_name}")
+      end
+      Logger.info("Completing report for #{view_name} => #{view_id}")
+    rescue
+      :exit, _ -> Exq.enqueue(Exq, "analytics", Schedulex.ScheduleGoogleAnalytics, [args])
     end
-    Logger.info("Completing report for #{view_name} => #{view_id}")
   end
 
 
