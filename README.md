@@ -32,9 +32,10 @@ sudo yum install git
 
 * Copy & or Add .env file inside containers/production/.env from env_sample
 
-* Build and Run using docker
+* Build and Run using docker from the cloned location
 
 ```unix
 sudo service docker start
+mkdir tmp/pids
 docker-compose up
 ```
