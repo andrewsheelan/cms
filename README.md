@@ -26,6 +26,10 @@ sudo chmod +x /usr/local/bin/docker-compose
 
 ```unix
 sudo yum install git
+sudo mkdir /var/www
+sudo chown `whoami` /var/www
+cd /var/www
+git clone https://github.com/andrewsheelan/cms.git
 ```
 
 * Download this repo
@@ -38,4 +42,6 @@ sudo yum install git
 sudo service docker start
 mkdir tmp/pids
 docker-compose up
+sudo chown `whoami` certs
 ```
+* Add web.com.cer and web.com.key inside certs directory for ssl
