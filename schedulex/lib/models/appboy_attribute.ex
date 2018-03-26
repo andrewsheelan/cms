@@ -63,7 +63,7 @@ defmodule Schedulex.Models.AppboyAttribute do
     from(
       u in {tbl, AppboyAttribute},
       select: u.id,
-      where: is_nil(u.status),
+      where: is_nil(u.status) and not is_nil(u.user_id),
       limit: @batch_size
     ) |> Repo.all
   end
