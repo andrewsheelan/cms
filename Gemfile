@@ -10,6 +10,7 @@ end
 gem 'rails', '~> 5.1.4'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
+gem 'postgres-copy'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 # Use SCSS for stylesheets
@@ -44,9 +45,15 @@ gem 'sidekiq-limit_fetch'
 
 # Admin Console
 gem 'activeadmin'
+gem 'charlock_holmes'
 gem 'activeadmin_addons'
 gem 'active_skin'
 gem 'devise'
+
+# Image upload
+gem 'carrierwave'
+gem 'file_validators'
+gem 'mini_magick'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -65,6 +65,7 @@ GEM
       activesupport (>= 3.0.0)
     arel (8.0.0)
     bcrypt (3.1.11)
+    bindex (0.5.0)
     builder (3.2.3)
     byebug (10.0.0)
     capybara (2.18.0)
@@ -74,6 +75,11 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (>= 2.0, < 4.0)
+    carrierwave (1.2.2)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
+    charlock_holmes (0.7.5)
     childprocess (0.8.0)
       ffi (~> 1.0, >= 1.0.11)
     coffee-rails (4.2.2)
@@ -98,6 +104,9 @@ GEM
       tzinfo
     execjs (2.7.0)
     ffi (1.9.23)
+    file_validators (2.1.0)
+      activemodel (>= 3.0)
+      mime-types (>= 1.0)
     formtastic (3.1.5)
       actionpack (>= 3.2.13)
     formtastic_i18n (0.6.0)
@@ -143,6 +152,10 @@ GEM
     mail (2.7.0)
       mini_mime (>= 0.1.1)
     method_source (0.9.0)
+    mime-types (3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0521)
+    mini_magick (4.8.0)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
     minitest (5.11.3)
@@ -155,6 +168,10 @@ GEM
     pg (0.21.0)
     polyamorous (1.3.3)
       activerecord (>= 3.0)
+    postgres-copy (1.4.0)
+      activerecord (>= 5.1)
+      pg (>= 0.17)
+      responders
     public_suffix (3.0.2)
     puma (3.11.2)
     rack (2.0.4)
@@ -281,6 +298,11 @@ GEM
       execjs (>= 0.3.0, < 3)
     warden (1.2.7)
       rack (>= 1.0)
+    web-console (3.5.1)
+      actionview (>= 5.0)
+      activemodel (>= 5.0)
+      bindex (>= 0.4.0)
+      railties (>= 5.0)
     websocket-driver (0.6.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
@@ -300,12 +322,17 @@ DEPENDENCIES
   activerecord-nulldb-adapter
   byebug
   capybara (~> 2.13)
+  carrierwave
+  charlock_holmes
   coffee-rails (~> 4.2)
   devise
   dotenv
+  file_validators
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
+  mini_magick
   pg (~> 0.18)
+  postgres-copy
   puma (~> 3.7)
   rails (~> 5.1.4)
   redis
@@ -323,6 +350,7 @@ DEPENDENCIES
   turbolinks (~> 5)
   tzinfo-data
   uglifier (>= 1.3.0)
+  web-console (>= 3.3.0)
 
 BUNDLED WITH
    1.16.1

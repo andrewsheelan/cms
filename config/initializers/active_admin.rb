@@ -4,7 +4,7 @@ ActiveAdmin.setup do |config|
   # Set the title that is displayed on the main layout
   # for each of the active admin pages.
   #
-  config.site_title = "Cms"
+  config.site_title = 'Cms'
 
   # Set the link url for the title. For example, to take
   # users to your main site. Defaults to no link.
@@ -295,7 +295,7 @@ ActiveAdmin.setup do |config|
   # config.order_clause = MyOrderClause
 end
 
-
+Dir["#{Rails.root}/lib/admin/*.rb"].each { |file| require file }
 require 'active_admin/base_controller'
 ActiveAdmin::BaseController.class_eval do
   rescue_from ::Exception do |exception|

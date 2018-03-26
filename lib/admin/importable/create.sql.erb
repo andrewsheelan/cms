@@ -1,0 +1,3 @@
+-- Create a staging table
+DROP TABLE IF EXISTS copy_table_stagings;
+CREATE TABLE copy_table_stagings (LIKE <%= table %>);

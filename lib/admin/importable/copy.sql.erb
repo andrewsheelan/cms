@@ -1,0 +1,11 @@
+-- Update records
+UPDATE <%= table %>
+SET <%= columns.map{|col| "#{col}=s.#{col}"}.join(',') %>
+FROM copy_table_stagings s
+WHERE <%= table %>.<%= table_column %> = s.<%= table_column %>;
+
+-- Insert records
+INSERT INTO <%= table %>
+SELECT s.* FROM copy_table_stagings s LEFT JOIN <%= table %>
+ON s.<%= table_column %> = <%= table %>.<%= table_column %>
+WHERE <%= table %>.<%= table_column %> IS NULL;
