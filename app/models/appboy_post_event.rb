@@ -1,6 +1,6 @@
 class AppboyPostEvent < ApplicationRecord
   acts_as_copy_target
-  scope :pending, -> { where(date_sent: nil, user_id: nil, email_valid: nil) }
+  scope :pending, -> { where(date_sent: nil, email_valid: true) }
   scope :invalid, -> { where(user_id: nil, email_valid: false) }
   scope :processed, -> { where('date_sent IS NOT NULL') }
 
