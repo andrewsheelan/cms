@@ -25,19 +25,19 @@ defmodule Schedulex.ScheduleTrackAppboy do
     ids = Schedulex.Models.AppboyAttribute.batch_unprocessed_users(tbl)
     unless Enum.empty?(ids) do
       Exq.enqueue(
-        Exq, "appboy", Schedulex.TrackPostAppboy, [appboy_group_id, tbl, ids]
+        Exq, "appboy", Schedulex.TrackPostAppboyAttributes, [appboy_group_id, tbl, ids]
       )
       Schedulex.Models.AppboyAttribute.set_status_for_users_in(tbl, ids, "QUEUED")
     end
   end
 
   defp process_events(appboy_group_id, tbl) do
-    ids = Schedulex.Models.AppboyAttribute.batch_unprocessed_users(tbl)
+    ids = Schedulex.Models.AppboyEvent.batch_unprocessed_users(tbl)
     unless Enum.empty?(ids) do
       Exq.enqueue(
-        Exq, "appboy", Schedulex.TrackPostAppboy, [appboy_group_id, tbl, ids]
+        Exq, "appboy", Schedulex.TrackPostAppboyEvents, [appboy_group_id, tbl, ids]
       )
-      Schedulex.Models.AppboyAttribute.set_status_for_users_in(tbl, ids, "QUEUED")
+      Schedulex.Models.AppboyEvent.set_status_for_users_in(tbl, ids, "QUEUED")
     end
   end
 end
