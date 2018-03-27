@@ -1,5 +1,5 @@
 ActiveAdmin.register AppboyPostEvent do
-  importable(key: 'id', retain: true)
+  importable(key: 'id', retain: false)
 
   menu priority: 2
   scope :all
