@@ -63,8 +63,6 @@ defmodule Schedulex.Appboy do
 
   """
   def send_bulk_events(app_group_id, params) do
-    app_group_id = System.get_env("APPBOY_GROUP_ID")
-    web_app_id =  System.get_env("APPBOY_WEB_API_KEY")
     # Define your static variables (app group ID, request url)
     request_url = "https://api.appboy.com/users/track"
     # Store the request data as a dictionary
