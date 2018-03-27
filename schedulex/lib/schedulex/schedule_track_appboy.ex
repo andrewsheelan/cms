@@ -17,7 +17,7 @@ defmodule Schedulex.ScheduleTrackAppboy do
     # appboy_group_id, tbl, batch_count \\ 10
     Enum.each 1..batch_count, fn(_) -> process_attributes(appboy_group_id, tbl) end
     if Map.has_key?(args, "events") do
-      Enum.each 1..batch_count, fn(_) -> process_events(appboy_group_id, tbl) end
+      Enum.each 1..batch_count, fn(_) -> process_events(appboy_group_id, Map.get(args, "web_app_id"), tbl) end
     end
   end
 
@@ -31,11 +31,11 @@ defmodule Schedulex.ScheduleTrackAppboy do
     end
   end
 
-  defp process_events(appboy_group_id, tbl) do
+  defp process_events(appboy_group_id, web_app_id, tbl) do
     ids = Schedulex.Models.AppboyEvent.batch_unprocessed_users(tbl)
     unless Enum.empty?(ids) do
       Exq.enqueue(
-        Exq, "appboy", Schedulex.TrackPostAppboyEvents, [appboy_group_id, tbl, ids]
+        Exq, "appboy", Schedulex.TrackPostAppboyEvents, [appboy_group_id, web_app_id, tbl, ids]
       )
       Schedulex.Models.AppboyEvent.set_status_for_users_in(tbl, ids, "QUEUED")
     end

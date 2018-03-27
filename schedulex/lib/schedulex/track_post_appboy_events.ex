@@ -12,10 +12,10 @@ defmodule Schedulex.TrackPostAppboyEvents do
       {:ok, 7645}
 
   """
-  def perform(appboy_group_id, tbl, ids) do
+  def perform(appboy_group_id, web_app_id, tbl, ids) do
     IO.inspect ids
     result = Schedulex.Models.AppboyEvent.users_in(tbl, ids)
-    {_, response} = Schedulex.Appboy.send_bulk_events(appboy_group_id, result)
+    {_, response} = Schedulex.Appboy.send_bulk_events(appboy_group_id, web_app_id, result)
     if response.status_code == 201 do
       Schedulex.Models.AppboyEvent.set_status_for_users_in(tbl, ids, "COMPLETED")
     else
