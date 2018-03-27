@@ -5,21 +5,9 @@ defmodule Schedulex.Models.AppboyAttribute do
   import Ecto.Query, only: [from: 2]
   schema "appboy_attributes" do
     field :user_id, :integer
-    field :attribute_name, :string
-    field :data_value, :string
+    field :event_name, :string
     field :status, :string
     field :date_sent, :utc_datetime
-  end
-
-  @doc """
-  Find by condition -- For the love of Active Record
-  Examples
-
-      iex> Schedulex.Models.AppboyAttribute.find_by("appboy_user_events", email: "email@example.com")
-      %Schedulex.Models.AppboyAttribute{}
-  """
-  def find_by(tbl, conditions) do
-    Repo.get_by {tbl, AppboyAttribute}, conditions
   end
 
   @doc """
@@ -63,7 +51,7 @@ defmodule Schedulex.Models.AppboyAttribute do
     from(
       u in {tbl, AppboyAttribute},
       select: u.id,
-      where: is_nil(u.status) and not is_nil(u.user_id) and not is_nil(u.attribute_name),
+      where: is_nil(u.status) and not is_nil(u.user_id) and not is_nil(u.event_name),
       limit: @batch_size
     ) |> Repo.all
   end

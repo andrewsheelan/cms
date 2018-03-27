@@ -1,4 +1,4 @@
-defmodule Schedulex.TrackPostAppboy do
+defmodule Schedulex.TrackPostAppboyEvents do
   @moduledoc """
   Documentation for Schedulex.TrackPostAppboy
   """
@@ -14,12 +14,12 @@ defmodule Schedulex.TrackPostAppboy do
   """
   def perform(appboy_group_id, tbl, ids) do
     IO.inspect ids
-    result = Schedulex.Models.AppboyAttribute.users_in(tbl, ids)
-    {_, response} = Schedulex.Appboy.send_bulk_attributes(appboy_group_id, result)
+    result = Schedulex.Models.AppboyEvent.users_in(tbl, ids)
+    {_, response} = Schedulex.Appboy.send_bulk_events(appboy_group_id, result)
     if response.status_code == 201 do
-      Schedulex.Models.AppboyAttribute.set_status_for_users_in(tbl, ids, "COMPLETED")
+      Schedulex.Models.AppboyEvent.set_status_for_users_in(tbl, ids, "COMPLETED")
     else
-      Schedulex.Models.AppboyAttribute.set_status_for_users_in(tbl, ids, response.body)
+      Schedulex.Models.AppboyEvent.set_status_for_users_in(tbl, ids, response.body)
     end
   end
 end

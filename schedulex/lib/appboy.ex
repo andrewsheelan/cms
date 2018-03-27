@@ -62,7 +62,7 @@ defmodule Schedulex.Appboy do
   iex> Schedulex.Appboy.send_bulk_events([%{event: "EVENT1", external_id: 1},%{event: "EVENT2", external_id: 2}])
 
   """
-  def send_bulk_events(params) do
+  def send_bulk_events(app_group_id, params) do
     app_group_id = System.get_env("APPBOY_GROUP_ID")
     web_app_id =  System.get_env("APPBOY_WEB_API_KEY")
     # Define your static variables (app group ID, request url)
@@ -70,10 +70,8 @@ defmodule Schedulex.Appboy do
     # Store the request data as a dictionary
     events_data = for event_data <- params do
       %{
-        time: DateTime.utc_now() |> DateTime.to_iso8601(),
-        app_id: web_app_id,
-        external_id: event_data.external_id,
-        name: event_data.event
+        external_id: event_data.user_id,
+        name: event_data.event_name
       }
     end
     data = %{
